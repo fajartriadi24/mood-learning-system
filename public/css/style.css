@@ -1,0 +1,56 @@
+/* ===================== */
+/* GLOBAL STYLE */
+/* ===================== */
+body {
+    background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
+    height: 100vh;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+
+/* ===================== */
+/* GLASSMORPHISM */
+/* ===================== */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* efek hover */
+.glass:hover {
+    transform: translateY(-5px);
+}
+
+
+/* ===================== */
+/* BUTTON CUSTOM */
+/* ===================== */
+.btn-custom {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    transition: 0.3s ease;
+}
+
+.btn-custom:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+
+/* ===================== */
+/* LINK STYLE */
+/* ===================== */
+a {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover {
+    opacity: 0.7;
+}
