@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', fn() => view('welcome'));
 Route::get('/', fn() => view('login'));
-
 Route::get('/register', fn() => view('register'));
 Route::get('/dashboard', fn() => view('dashboard'));
 Route::get('/mood', fn() => view('mood'));
