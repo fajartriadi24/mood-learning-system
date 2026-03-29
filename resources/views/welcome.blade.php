@@ -1,55 +1,156 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Mood Learning</title>
+@extends('layout')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+@section('content')
 
-    <!-- CSS CUSTOM -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-</head>
+<!-- ================= HERO ================= -->
+<div class="hero-section text-center">
 
-<body>
+    <div class="glass-box hero-box">
 
-<div class="hero">
+        <h1>Halo,<br> Anak-Anak</h1>
 
-    <div class="container h-100">
-        <div class="row h-100 align-items-center">
+        <p class="desc">
+            Sistem pembelajaran adaptif pemrograman dasar yang menyesuaikan materi berdasarkan mood belajar kamu.
+        </p>
 
-            <!-- KIRI -->
-            <div class="col-md-6">
-                <div class="glass-box">
+        <button id="btnStart" class="btn btn-custom mt-3">
+            Pelajari!
+        </button>
 
-                    <p class="small-text">MOOD LEARNING SYSTEM</p>
-
-                    <h1>
-                        Halo,<br>
-                        Anak-anak
-                    </h1>
-
-                    <p class="desc">
-                        PILIH MOOD-MU, DAN DAPATKAN MATERI YANG SESUAI UNTUK BELAJAR LEBIH EFEKTIF.
-                    </p>
-
-                    <a href="/login" class="btn btn-custom">
-                        Pelajari Sekarang
-                    </a>
-
-                </div>
-            </div>
-
-            <!-- KANAN -->
-            <div class="col-md-6 text-center">
-                <h5 class="mb-3">"GET STARTED"</h5>
-
-                <a href="/login" class="btn btn-custom me-2">Sign In</a>
-                <a href="/register" class="btn btn-custom">Sign Up</a>
-            </div>
-
-        </div>
     </div>
 
 </div>
 
-</body>
-</html>
+<!-- ================= SECTION 2 ================= -->
+<div id="section2" class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-10">
+
+            <div class="glass-box">
+
+                <h3 class="text-center mb-5">Cara Kerja Sistem</h3>
+
+                <div class="row text-center">
+
+                    <!-- STEP 1 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <h5>Login</h5>
+                            <p>Masuk ke sistem menggunakan akun</p>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="step-box">
+
+                            <div class="step-number">2</div>
+                            <h5>Pilih Mood</h5>
+
+                            <div class="mood-wrapper mt-3 mb-3">
+
+                                <div class="mood-item">
+                                    <button class="mood-btn" data-mood="semangat">
+                                        <span>😊</span>
+                                    </button>
+                                    <div class="mood-label">Semangat</div>
+                                </div>
+
+                                <div class="mood-item">
+                                    <button class="mood-btn" data-mood="biasa">
+                                        <span>😐</span>
+                                    </button>
+                                    <div class="mood-label">Biasa</div>
+                                </div>
+
+                                <div class="mood-item">
+                                    <button class="mood-btn" data-mood="lelah">
+                                        <span>😴</span>
+                                    </button>
+                                    <div class="mood-label">Lelah</div>
+                                </div>
+
+                                <div class="mood-item">
+                                    <button class="mood-btn" data-mood="bingung">
+                                        <span>😕</span>
+                                    </button>
+                                    <div class="mood-label">Bingung</div>
+                                </div>
+
+                            </div>
+
+                            <div id="hasilMood" class="hasil-text">
+                                Pilih mood untuk melihat rekomendasi
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- STEP 3 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <h5>Rekomendasi</h5>
+                            <p>Materi disesuaikan dengan kondisi belajar</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SCRIPT ================= -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // SCROLL
+    document.getElementById("btnStart").onclick = function () {
+        document.getElementById("section2").scrollIntoView({
+            behavior: "smooth"
+        });
+    };
+
+    const hasil = document.getElementById("hasilMood");
+
+    document.querySelectorAll(".mood-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+
+            // reset semua
+            document.querySelectorAll(".mood-btn").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".mood-item").forEach(i => i.classList.remove("active"));
+
+            // aktifkan
+            this.classList.add("active");
+            this.parentElement.classList.add("active");
+
+            const mood = this.dataset.mood;
+            let text = "";
+
+            if (mood === "semangat") {
+                text = "🔥 Latihan soal dengan tingkat kesulitan tinggi";
+            } else if (mood === "biasa") {
+                text = "📘 Materi pembelajaran standar + kuis";
+            } else if (mood === "lelah") {
+                text = "🎥 Video pembelajaran singkat";
+            } else if (mood === "bingung") {
+                text = "🧠 Penjelasan ulang konsep dasar";
+            }
+
+            hasil.innerHTML = "<b>Rekomendasi:</b><br>" + text;
+
+        });
+    });
+
+});
+</script>
+
+@endsection
