@@ -1,12 +1,35 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MoodController;
 
-Route::get('/', fn() => view('welcome')); // halaman awal
+// ================= LANDING PAGE =================
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
 
-Route::get('/dashboard', fn() => view('dashboard'));
-Route::get('/mood', fn() => view('mood'));
-Route::get('/materi', fn() => view('materi'));
-Route::get('/quiz', fn() => view('quiz'));
-Route::get('/history', fn() => view('history'));
-Route::get('/profile', fn() => view('profile'));
+// ================= AUTHENTICATION =================
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// ================= PROTECTED ROUTES =================
+Route::middleware(['auth'])->group(function () {
+    
+    // Halaman Pilih Mood (Nama disederhanakan jadi 'mood')
+    Route::get('/mood', [MoodController::class, 'index'])->name('mood');
+
+    // Proses Simpan Mood
+    Route::post('/mood/store', [MoodController::class, 'store'])->name('mood.store');
+
+    // Dashboard Utama
+    Route::get('/dashboard', function () {
+        // Jika belum pilih mood, balikkan ke rute 'mood' (Bukan mood.index)
+        if (!session()->has('current_mood')) {
+            return redirect()->route('mood');
+        }
+        return view('dashboard');
+    })->name('dashboard');
+
+});
