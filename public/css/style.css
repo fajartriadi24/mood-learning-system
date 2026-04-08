@@ -31,13 +31,13 @@ body {
 
 /* 2. Background Halaman Mood */
 #main-wrapper.mood {
-    background-image: url('../images/mbg.png');
+    background-image: url('../images/mbg1.png');
     background-attachment: fixed; /* Tetap terkunci untuk tampilan kartu */
 }
 
 /* 3. Background Halaman Dashboard */
 #main-wrapper.dashboard {
-    background-image: url('../images/bg-dashboard.jpg');
+    background-image: url('../images/dbg.png');
     background-attachment: fixed;
 }
 
