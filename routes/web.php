@@ -11,12 +11,25 @@ Route::get('/', function () {
 })->name('welcome');
 
 // ================= AUTHENTICATION =================
+
+/**
+ * PERBAIKAN: Jangan arahkan ke view('auth.login').
+ * Kita arahkan kembali ke 'welcome' dengan membawa session 'openLogin'.
+ * Ini akan memicu JavaScript di app.blade.php untuk membuka Modal Login.
+ */
+Route::get('/login', function () {
+    return redirect()->route('welcome')->with('openLogin', true);
+})->name('login');
+
+// Proses autentikasi (POST)
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ================= PROTECTED ROUTES (Hanya User Login) =================
 Route::middleware(['auth'])->group(function () {
+    
+    // --- AKSES BERSAMA ---
     
     // 1. Halaman Pilih Mood
     Route::get('/mood', [MoodController::class, 'index'])->name('mood');
@@ -24,16 +37,33 @@ Route::middleware(['auth'])->group(function () {
     // 2. Proses Simpan Mood
     Route::post('/mood/store', [MoodController::class, 'store'])->name('mood.store');
 
-    // 3. Dashboard Utama
+    // 3. Dashboard Utama (Siswa/Guru)
     Route::get('/dashboard', function () {
-        // Jika belum pilih mood, arahkan paksa ke halaman pilih mood
-        if (!session()->has('current_mood')) {
+        // Cek mood khusus untuk Siswa (Guru tidak wajib pilih mood)
+        if (Auth::user()->role == 'siswa' && !session()->has('current_mood')) {
             return redirect()->route('mood');
         }
         return view('dashboard');
     })->name('dashboard');
 
-    // 4. Halaman Materi Pembelajaran (Adaptif)
-    Route::get('/materi', [MateriController::class, 'index'])->name('materi.index');
+    // --- AKSES KHUSUS SISWA (Role Middleware) ---
+    Route::middleware(['role:siswa'])->group(function () {
+        Route::get('/materi', [MateriController::class, 'index'])->name('materi.index');
+        Route::get('/quiz', function() { 
+            return view('quiz'); 
+        })->name('quiz.index');
+    });
+
+    // --- AKSES KHUSUS GURU (Role Middleware) ---
+    Route::middleware(['role:guru'])->group(function () {
+        // Kelola Materi
+        Route::get('/materi/create', [MateriController::class, 'create'])->name('materi.create');
+        Route::post('/materi/store', [MateriController::class, 'store'])->name('materi.store');
+        
+        // Kelola Quiz
+        Route::get('/quiz/create', function() { 
+            return view('quiz_create'); 
+        })->name('quiz.create');
+    });
 
 });

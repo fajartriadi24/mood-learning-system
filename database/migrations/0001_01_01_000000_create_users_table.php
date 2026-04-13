@@ -15,12 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            // --- TAMBAHKAN BARIS INI ---
+            $table->string('role')->default('siswa'); // Nilai bawaan adalah 'siswa'
+            // ---------------------------
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });
 
+        // Bagian password_reset_tokens dan sessions tetap sama
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');

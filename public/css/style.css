@@ -31,7 +31,7 @@ body {
 
 /* 2. Background Halaman Mood */
 #main-wrapper.mood {
-    background-image: url('../images/mbg1.png');
+    background-image: url('../images/mbg.png');
     background-attachment: fixed; /* Tetap terkunci untuk tampilan kartu */
 }
 
@@ -199,4 +199,56 @@ input:-webkit-autofill {
 
 body.modal-open {
     overflow: hidden;
+}
+
+/* ================= LOGON PILIHAN ================= */
+  .btn-outline-custom {
+        color: #c1ff72;
+        border: 2px solid #c1ff72;
+        border-radius: 12px;
+        transition: 0.3s;
+    }
+
+    .btn-outline-custom:hover {
+        background-color: rgba(193, 255, 114, 0.1);
+        color: #c1ff72;
+        border-color: #c1ff72;
+    }
+
+    .btn-check:checked + .btn-outline-custom {
+        background-color: #c1ff72 !important;
+        color: #000 !important;
+        border-color: #c1ff72 !important;
+        box-shadow: 0 0 15px rgba(193, 255, 114, 0.4);
+    }
+
+      /* Style agar ikon mata berada di dalam input */
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #ccc;
+            z-index: 10;
+        }
+        .toggle-password:hover {
+            color: #c1ff72;
+        }
+
+        /* Menghilangkan outline biru default dan menggantinya dengan hijau */
+.form-control:focus {
+    border-color: #c1ff72 !important; /* Warna pinggiran jadi hijau */
+    box-shadow: 0 0 0 0.25rem rgba(193, 255, 114, 0.25) !important; /* Efek cahaya (glow) hijau tipis */
+    background-color: #1a1a1a; /* Tetap gelap saat diklik */
+    color: #fff; /* Teks tetap putih */
+}
+
+/* Khusus untuk input kode guru yang sudah kamu beri border hijau agar tidak berubah biru juga */
+.guru-code-input:focus {
+    border-color: #c1ff72 !important;
+    box-shadow: 0 0 8px rgba(193, 255, 114, 0.5) !important;
 }

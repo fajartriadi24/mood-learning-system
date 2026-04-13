@@ -8,23 +8,16 @@ use Illuminate\Support\Facades\Auth;
 class MateriController extends Controller
 {
     /**
-     * Pastikan user sudah login sebelum mengakses materi
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Menampilkan halaman materi berdasarkan mood
+     * Menampilkan halaman materi pembelajaran adaptif.
+     * Fungsi ini mengambil data mood dari session untuk menentukan konten.
      */
     public function index()
     {
-        // 1. Ambil mood dari session yang diset oleh MoodController
-        // Jika tidak ada, kita beri default 'biasa'
+        // 1. Ambil mood dari session yang diset oleh MoodController.
+        // Jika session kosong (misal user langsung ketik URL), default ke 'biasa'.
         $mood = session('current_mood', 'biasa');
 
-        // 2. Kirim data mood ke view materi.blade.php
+        // 2. Kirim data ke view 'materi.blade.php'
         return view('materi', [
             'mood' => $mood,
             'userName' => Auth::user()->name
@@ -32,13 +25,11 @@ class MateriController extends Controller
     }
 
     /**
-     * Fitur tambahan: Menyelesaikan materi dan update progress
+     * Fitur tambahan: Menandai materi sebagai selesai (Optional untuk Skripsi)
      */
-    public function complete(Request $request)
+    public function finishMateri(Request $request)
     {
-        // Di sini nanti kamu bisa tambahkan logika simpan progress ke database
-        // sesuai alur sistem poin ke-6 yang kamu buat tadi.
-        
-        return redirect()->route('dashboard')->with('success', 'Selamat! Materi telah diselesaikan.');
+        // Di sini kamu bisa menambahkan logika simpan progres ke database nanti
+        return redirect()->route('dashboard')->with('success', 'Materi berhasil diselesaikan!');
     }
 }

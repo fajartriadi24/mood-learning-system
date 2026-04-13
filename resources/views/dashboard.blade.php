@@ -8,12 +8,12 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3 class="text-dark fw-bold m-0">Dashboard Pembelajaran</h3>
-    {{-- Button ganti mood dengan sedikit bayangan agar tidak tenggelam --}}
-    <a href="{{ route('mood') }}" class="btn btn-dark px-5 py-2 fw-bold shadow-lg" style="border-radius: 12px;">Ganti Mood</a>
+    {{-- Button ganti mood --}}
+    <a href="{{ route('mood') }}" class="btn btn-dark px-4 py-2 fw-bold shadow-lg" style="border-radius: 12px;">Ganti Mood</a>
 </div>
 
-{{-- Kartu Status Mood - Pakai text-dark agar tulisan hitam kelihatan jelas --}}
-<div class="glass-box p-4 mb-4 d-flex align-items-center shadow-sm">
+{{-- Kartu Status Mood --}}
+<div class="glass-box p-4 mb-4 d-flex align-items-center shadow-sm" style="background: rgba(255,255,255,0.8) !important;">
     <div class="fs-2 me-3">
         @if($mood == 'semangat') 🔥 
         @elseif($mood == 'biasa') 📘 
@@ -29,7 +29,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div class="glass-box p-4 shadow-sm">
+        <div class="glass-box p-4 shadow-sm" style="background: rgba(255,255,255,0.8) !important;">
             <h5 class="fw-bold mb-3 text-dark">Materi Rekomendasi:</h5>
             
             @if($mood == 'semangat')
@@ -61,13 +61,15 @@
     </div>
 </div>
 
-{{-- Perbaikan Tombol: Menggunakan warna gelap & shadow hitam agar kontras dengan bg putih --}}
+{{-- Area Tombol Aksi --}}
 @if($mood)
-<div class="mt-4">
-    <button class="btn btn-dark px-5 py-2 fw-bold shadow-lg" style="border-radius: 12px;">
+<div class="mt-4 d-flex gap-3">
+    {{-- PERBAIKAN: Mengubah <button> menjadi <a> agar bisa diklik menuju halaman materi --}}
+    <a href="{{ route('materi.index') }}" class="btn btn-outline-dark px-5 py-2 fw-bold shadow-sm" style="border-radius: 12px; border-width: 2px;">
         Lanjutkan Materi
-    </button>
-     <button class="btn btn-dark px-5 py-2 fw-bold shadow-lg" style="border-radius: 12px;">
+    </a>
+    
+    <button class="btn btn-outline-dark px-5 py-2 fw-bold shadow-sm" style="border-radius: 12px; border-width: 2px;">
         Mulai Quiz
     </button>
 </div>
