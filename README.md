@@ -48,7 +48,9 @@ Menggunakan konsep:
 ## 📄 Laporan Praktikum
 
 - Praktikum 1: docs/Fajar Triadi_2313025009_Web Framework_Praktikum 1.pdf  
-- Praktikum 2: docs/Fajar Triadi_2313025009_Web Framework_Praktikum 2.pdf  
+- Praktikum 2: docs/Fajar Triadi_2313025009_Web Framework_Praktikum 2 dan 3.pdf
+- Praktikum 3: docs/Fajar Triadi_2313025009_Web Framework_Praktikum 4 dan 5.pdf
+- Parktikum 4: docs/Fajar Triadi_2313025009_Web Framework_Praktikum 6.pdf
 
 ---
 
