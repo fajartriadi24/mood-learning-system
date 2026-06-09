@@ -11,23 +11,23 @@ class RoleMiddleware
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  $role
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        // 1. Cek apakah user sudah login
+        // 1. Cek apakah user sudah login sama sekali
         if (!Auth::check()) {
-            return redirect()->route('login');
+            return redirect('/')->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        // 2. Cek apakah role user sesuai dengan yang diminta di route
-        if (Auth::user()->role !== $role) {
-            // Jika siswa coba masuk ke area guru, lempar ke dashboard siswa
-            return redirect()->route('dashboard')->with('error', 'Akses ditolak! Halaman ini hanya untuk ' . $role);
+        // 2. Ambil role user & bersihkan dari spasi/huruf kapital (Biar Sinkron sama Database)
+        $userRole = trim(strtolower(Auth::user()->role));
+        $requiredRole = trim(strtolower($role));
+
+        // 3. Bandingkan role
+        if ($userRole !== $requiredRole) {
+            // Jika role tidak cocok, paksa logout atau lempar ke welcome
+            // Tambahkan pesan error agar kamu tahu dia ditendang di sini
+            return redirect('/')->with('error', "Akses Ditolak! Role Anda: $userRole, Butuh: $requiredRole");
         }
 
         return $next($request);

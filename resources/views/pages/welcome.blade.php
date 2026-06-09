@@ -7,7 +7,7 @@
         <p class="desc opacity-75">
             Sistem pembelajaran adaptif pemrograman dasar yang menyesuaikan materi berdasarkan mood belajar kamu.
         </p>
-        <button id="btnStart" class="btn btn-custom mt-3 px-5 py-2">
+        <button id="btnStart" class="btn btn-pelajari mt-3 px-5 py-2">
             Pelajari!
         </button>
     </div>

@@ -1,27 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoodController;
 use App\Http\Controllers\MateriController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
 
 // ================= LANDING PAGE =================
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect()->intended('/dashboard');
+    }
+    return view('pages.welcome'); 
 })->name('welcome');
 
 // ================= AUTHENTICATION =================
-
-/**
- * PERBAIKAN: Jangan arahkan ke view('auth.login').
- * Kita arahkan kembali ke 'welcome' dengan membawa session 'openLogin'.
- * Ini akan memicu JavaScript di app.blade.php untuk membuka Modal Login.
- */
 Route::get('/login', function () {
+    if (Auth::check()) return redirect()->intended('/dashboard');
     return redirect()->route('welcome')->with('openLogin', true);
 })->name('login');
 
-// Proses autentikasi (POST)
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -29,41 +29,43 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ================= PROTECTED ROUTES (Hanya User Login) =================
 Route::middleware(['auth'])->group(function () {
     
-    // --- AKSES BERSAMA ---
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    // 1. Halaman Pilih Mood
-    Route::get('/mood', [MoodController::class, 'index'])->name('mood');
+    Route::get('/mood', function () {
+        return view('pages.mood');
+    })->name('mood');
 
-    // 2. Proses Simpan Mood
     Route::post('/mood/store', [MoodController::class, 'store'])->name('mood.store');
+    
+    Route::get('/history', function () {
+        return view('materi.history');
+    })->name('history');
 
-    // 3. Dashboard Utama (Siswa/Guru)
-    Route::get('/dashboard', function () {
-        // Cek mood khusus untuk Siswa (Guru tidak wajib pilih mood)
-        if (Auth::user()->role == 'siswa' && !session()->has('current_mood')) {
-            return redirect()->route('mood');
-        }
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // --- AKSES KHUSUS SISWA (Role Middleware) ---
-    Route::middleware(['role:siswa'])->group(function () {
-        Route::get('/materi', [MateriController::class, 'index'])->name('materi.index');
-        Route::get('/quiz', function() { 
-            return view('quiz'); 
-        })->name('quiz.index');
-    });
+    // --- AKSES MATERI ---
+    Route::get('/materi', [MateriController::class, 'index'])->name('materi.index');
+    Route::post('/materi/{id}/video-done', [MateriController::class, 'markVideoDone'])->name('video.done');
+    Route::post('/materi/{id}/quiz-done', [MateriController::class, 'markQuizDone'])->name('quiz.done');
 
-    // --- AKSES KHUSUS GURU (Role Middleware) ---
-    Route::middleware(['role:guru'])->group(function () {
-        // Kelola Materi
-        Route::get('/materi/create', [MateriController::class, 'create'])->name('materi.create');
-        Route::post('/materi/store', [MateriController::class, 'store'])->name('materi.store');
-        
-        // Kelola Quiz
-        Route::get('/quiz/create', function() { 
-            return view('quiz_create'); 
-        })->name('quiz.create');
-    });
+    // --- AKSES KELOLA GURU (Tanpa Middleware Role) ---
+    Route::get('/materi/create', [MateriController::class, 'create'])->name('materi.create');
+    Route::post('/materi/store', [MateriController::class, 'store'])->name('materi.store');
+    Route::get('/materi/{id}/edit', [MateriController::class, 'edit'])->name('materi.edit');
+    Route::put('/materi/{id}', [MateriController::class, 'update'])->name('materi.update');
+    Route::delete('/materi/{id}', [MateriController::class, 'destroy'])->name('materi.destroy');
+    
+    Route::delete('/siswa/{id}', [DashboardController::class, 'destroySiswa'])->name('siswa.destroy');
+    
+    Route::get('/quiz/create', [MateriController::class, 'createQuiz'])->name('quiz.create');
+    Route::post('/quiz/store', [MateriController::class, 'storeQuiz'])->name('quiz.store');
+    Route::get('/quiz/{id}/edit', [MateriController::class, 'editQuiz'])->name('quiz.edit');
+    Route::put('/quiz/{id}/update', [MateriController::class, 'updateQuiz'])->name('quiz.update');
+    Route::delete('/quiz/{id}', [MateriController::class, 'destroyQuiz'])->name('quiz.destroy');
 
+    Route::get('/quiz/{id}', [MateriController::class, 'showQuiz'])->name('quiz.show');
 });
+
+// JANGAN ADA BARIS 'require __DIR__.'/auth.php';' DI SINI!

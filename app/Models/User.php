@@ -21,7 +21,33 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',        // TAMBAHKAN INI: Agar role tersimpan ke database
+        'kode_guru',   // TAMBAHKAN INI: Agar kode guru bisa disimpan
     ];
+
+    /**
+     * Relasi: Satu User (Guru) bisa memiliki banyak Materi
+     */
+    public function materis()
+    {
+        return $this->hasMany(Materi::class);
+    }
+
+    /**
+     * Relasi: Satu User (Siswa) bisa memiliki banyak hasil kuis
+     */
+    public function quizResults()
+    {
+        return $this->hasMany(QuizResult::class);
+    }
+
+    /**
+     * Relasi: Satu User (Siswa) memiliki data progres belajar
+     */
+    public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
